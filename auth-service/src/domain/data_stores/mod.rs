@@ -1,4 +1,4 @@
-use crate::domain::User;
+use crate::domain::{Email, Password, User};
 use crate::services::hashmap_user_store::HashmapUserStore;
 use async_trait::async_trait;
 
@@ -13,7 +13,7 @@ pub enum UserStoreError {
 #[async_trait]
 pub trait UserStore {
     async fn add_user(&mut self, user: User) -> Result<(), UserStoreError>;
-    async fn get_user(&self, user_email: &str) -> Result<User, UserStoreError>;
+    async fn get_user(&self, user_email: &Email) -> Result<User, UserStoreError>;
     async fn validate_user(
         &self,
         user_email: &str,
@@ -27,7 +27,7 @@ impl UserStore for HashmapUserStore {
         self.add_user(user).await
     }
 
-    async fn get_user(&self, user_email: &str) -> Result<User, UserStoreError> {
+    async fn get_user(&self, user_email: &Email) -> Result<User, UserStoreError> {
         self.get_user(user_email).await
     }
 

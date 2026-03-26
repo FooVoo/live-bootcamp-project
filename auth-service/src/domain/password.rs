@@ -6,7 +6,7 @@ pub type Password = PasswordStruct;
 pub struct PasswordStruct(String);
 
 impl PasswordStruct {
-    pub(crate) fn parse(password: &str) -> Result<Password, ValidationError> {
+    pub fn parse(password: &str) -> Result<Password, ValidationError> {
         if password.len() < 8 {
             return Err(ValidationError::new("too short"));
         }

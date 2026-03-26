@@ -17,8 +17,8 @@ impl HashmapUserStore {
         Ok(())
     }
 
-    pub async fn get_user(&self, user_email: &str) -> Result<User, UserStoreError> {
-        let user = self.users.get(&Email::parse(user_email).unwrap());
+    pub async fn get_user(&self, user_email: &Email) -> Result<User, UserStoreError> {
+        let user = self.users.get(&user_email);
 
         match user {
             Some(user) => Ok(user.clone()),
@@ -31,7 +31,10 @@ impl HashmapUserStore {
         user_email: &str,
         user_password: &str,
     ) -> Result<(), UserStoreError> {
-        if user_email == "" || user_password == "" {
+        let email = Email::parse(user_email);
+        let password = Email::parse(user_password);
+
+        if email.is_err() || password.is_err() {
             return Err(UserStoreError::InvalidCredentials);
         }
 
