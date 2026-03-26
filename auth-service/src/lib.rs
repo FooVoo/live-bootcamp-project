@@ -1,5 +1,9 @@
-mod routes;
+pub mod app_state;
+pub mod domain;
+pub mod routes;
+pub mod services;
 
+use app_state::AppState;
 use axum::routing::post;
 use axum::serve::Serve;
 use axum::Router;
@@ -13,19 +17,22 @@ pub struct Application {
 }
 
 impl Application {
-    pub async fn build(address: &str) -> Result<Self, Box<dyn Error>> {
+    pub async fn build(app_state: AppState, address: &str) -> Result<Self, Box<dyn Error>> {
         let asset_dir =
             ServeDir::new("assets").not_found_service(ServeFile::new("assets/index.html"));
+
         let router = Router::new()
             .fallback_service(asset_dir)
             .route("/signup", post(routes::signup_handler))
             .route("/login", post(routes::login_handler))
             .route("/verify-2fa", post(routes::verify_2fa_handler))
             .route("/logout", post(routes::logout_handler))
-            .route("/verify-token", post(routes::verify_token_handler));
+            .route("/verify-token", post(routes::verify_token_handler))
+            .with_state(app_state);
 
         let listener = TcpListener::bind(address).await?;
         let address = listener.local_addr()?.to_string();
+
         let server = axum::serve(listener, router);
 
         Ok(Application { server, address })
