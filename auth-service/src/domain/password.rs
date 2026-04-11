@@ -1,8 +1,9 @@
+use serde::Deserialize;
 use validator::ValidationError;
 
 pub type Password = PasswordStruct;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Deserialize)]
 pub struct PasswordStruct(String);
 
 impl PasswordStruct {

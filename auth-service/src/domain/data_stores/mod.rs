@@ -1,4 +1,4 @@
-use crate::domain::{Email, Password, User};
+use crate::domain::{Email, User};
 use crate::services::hashmap_user_store::HashmapUserStore;
 use async_trait::async_trait;
 

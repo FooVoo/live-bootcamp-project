@@ -1,6 +1,8 @@
-use validator::{ValidateEmail, ValidationError};
+use serde::Deserialize;
+use std::fmt::Display;
+use validator::ValidationError;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Debug, PartialEq, Eq, Hash, Deserialize)]
 pub struct EmailStruct(String);
 
 pub type Email = EmailStruct;
@@ -13,6 +15,12 @@ impl Email {
             ));
         }
         Ok(EmailStruct(email.to_string()))
+    }
+}
+
+impl Display for Email {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
     }
 }
 
